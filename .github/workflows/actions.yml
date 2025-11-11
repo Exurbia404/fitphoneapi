@@ -37,10 +37,9 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
-        context: .
+        context: FitphoneBackend
         push: true
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}${{ github.event.repository.name }}:latest
         # For semantic versioning, add: docker/${{ github.event.repository.name }}:${{ github.ref_name }}
-        file: ./FitphoneBackend/Dockerfile  # Path to your Dockerfile
-
+        file: ./Dockerfile
