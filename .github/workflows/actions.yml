@@ -42,4 +42,4 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}${{ github.event.repository.name }}:latest
         # For semantic versioning, add: docker/${{ github.event.repository.name }}:${{ github.ref_name }}
-        file: ./Dockerfile
+        file: Dockerfile
