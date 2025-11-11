@@ -10,7 +10,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["FitphoneBackend.csproj", "."]
+COPY ["FitphoneBackend.csproj", "./"]
 RUN dotnet restore "FitphoneBackend.csproj"
 COPY . .
 WORKDIR "/src/."
