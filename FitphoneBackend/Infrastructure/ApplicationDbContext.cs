@@ -1,0 +1,23 @@
+﻿using Microsoft.EntityFrameworkCore;
+using FitPhoneBackend.Business.Entities;
+namespace FitPhoneBackend.Infrastructure
+{
+    public class ApplicationDbContext : DbContext
+    {
+        
+            public DbSet<User> Users { get; set; }
+            public DbSet<PhoneUsage> PhoneUsages { get; set; }
+            public DbSet<Education> Educations{ get; set; }
+            public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { } //in case I want to have extra options on this class
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                base.OnModelCreating(modelBuilder);
+
+            //Facades for user configurations
+            modelBuilder.ApplyConfiguration(new UserConfiguration()); //Facades to decrease pollution in this config class
+            modelBuilder.ApplyConfiguration(new PhoneUsageConfiguration());
+            modelBuilder.ApplyConfiguration(new EducationConfiguration());
+            }
+        
+    }
+}

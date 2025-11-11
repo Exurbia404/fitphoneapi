@@ -1,0 +1,6 @@
+@FitphoneBackend_HostAddress = http://localhost:5050
+
+GET {{FitphoneBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
