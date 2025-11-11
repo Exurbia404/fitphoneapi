@@ -14,32 +14,35 @@ jobs:
       packages: write
 
     steps:
-      # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Set up Docker Buildx (for multi-platform if needed, but works for single too)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Login to Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD}}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Extract metadata (tags, labels) for Docker image
+      # Define image name with Docker Hub username
+      - name: Set image name
+        id: image
+        run: |
+          echo "name=${{ secrets.DOCKERHUB_USERNAME }}/fitphoneapi" >> $GITHUB_OUTPUT
+
+      # Extract metadata
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
+          images: ${{ steps.image.outputs.name }}
           tags: |
             type=sha,prefix=,format=short
             type=raw,value=latest,enable={{is_default_branch}}
 
-      # Build and push Docker image
+      # Build and push
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
