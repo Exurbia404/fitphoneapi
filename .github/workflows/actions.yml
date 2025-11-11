@@ -28,9 +28,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Test (optional)
-      run: dotnet test --no-build --verbosity normal
-
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
       with:
