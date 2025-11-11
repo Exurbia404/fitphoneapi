@@ -33,12 +33,14 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
+        
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
-        context: FitphoneBackend          # Build from this folder
+        context: .
         push: true
         tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/fitphoneapi:latest   # fixed (no leading slash)        
-        file: ./Dockerfile                # Dockerfile is in FitphoneBackend
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+        # For semantic versioning, add: docker/${{ github.event.repository.name }}:${{ github.ref_name }}
+        file: ./Dockerfile  # Path to your Dockerfile
+
