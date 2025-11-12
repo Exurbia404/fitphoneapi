@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,9 +21,12 @@ namespace FitPhoneBackend.Business.Entities
 
         [Required]
         public Guid UserId { get; private set; }
-    
-        public int UnlockCount { get; private set; } //pick ups
-        public int ScreenTimeMinutes { get; private set; } 
+
+        [Column(TypeName = "int")]
+        public int UnlockCount { get; private set; }
+
+        [Column(TypeName = "int")]
+        public int ScreenTimeMinutes { get; private set; }
 
         public void Update(int unlockCount, int screenTimeMinutes)
         {

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FitPhoneBackend.Business.Entities
 {
@@ -6,12 +7,22 @@ namespace FitPhoneBackend.Business.Entities
     {
         [Key]
         public int Id { get; set; }
+
         [Required]
-        public string Name { get; set; }
+        [Column(TypeName = "varchar(255)")]
+        public string Name { get; set; } = null!;
+
         [Required]
-        public string Description { get; set; }
-        public string VideoURL { get; set; }
-        public string ArticleURL { get; set; }
-        public string Type { get; set; } //defines if it is a video or an article
+        [Column(TypeName = "varchar(254)")]
+        public string Description { get; set; } = null!;
+
+        [Column(TypeName = "longtext")]
+        public string VideoURL { get; set; } = null!;
+
+        [Column(TypeName = "longtext")]
+        public string ArticleURL { get; set; } = null!;
+
+        [Column(TypeName = "varchar(100)")]
+        public string Type { get; set; } = null!; // video or article
     }
 }

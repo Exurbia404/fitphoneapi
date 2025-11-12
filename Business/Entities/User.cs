@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace FitPhoneBackend.Business.Entities
@@ -34,9 +35,11 @@ namespace FitPhoneBackend.Business.Entities
         public UsageReason UsageReason { get; set; }
 
         [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         public PhoneUsage PhoneUsage { get; set; } //1-1 relationship, phone usage belongs to only one user
