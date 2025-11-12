@@ -6,7 +6,7 @@ namespace FitPhoneBackend.Business.Entities
     public class Education
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [Column(TypeName = "varchar(255)")]

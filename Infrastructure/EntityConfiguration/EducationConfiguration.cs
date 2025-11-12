@@ -9,7 +9,7 @@ public class EducationConfiguration : IEntityTypeConfiguration<Education>
 {
     public void Configure(EntityTypeBuilder<Education> entity)
     {
-            entity.ToTable("education_material");   // Map to table "education_material"
+            entity.ToTable("education");   // Map to table "education_material"
             entity.HasKey(em => em.Id);                 // Primary key
 
             entity.Property(em => em.Name)

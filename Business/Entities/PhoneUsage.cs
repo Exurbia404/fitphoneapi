@@ -17,16 +17,16 @@ namespace FitPhoneBackend.Business.Entities
         public PhoneUsage() { }
 
         [Key]
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public Guid UserId { get; private set; }
+        public Guid UserId { get; set; }
 
         [Column(TypeName = "int")]
-        public int UnlockCount { get; private set; }
+        public int UnlockCount { get; set; }
 
         [Column(TypeName = "int")]
-        public int ScreenTimeMinutes { get; private set; }
+        public int ScreenTimeMinutes { get; set; }
 
         public void Update(int unlockCount, int screenTimeMinutes)
         {

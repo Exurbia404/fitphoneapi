@@ -1,65 +1,80 @@
-﻿using FitPhoneBackend.Business.Entities;
+﻿// FitPhoneBackend.Business/Services/PhoneUsageService.cs
+using FitPhoneBackend.Business.Entities;
+using FitPhoneBackend.Business.Interfaces;
 using FitPhoneBackend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace FitPhoneBackend.Business.Services
 {
-    public interface IPhoneUsageService
+    public class PhoneUsageService :
+        ICreatable<PhoneUsage>,
+        IReadable<PhoneUsage>,
+        IUpdatable<PhoneUsage>,
+        IDeletable<PhoneUsage>
     {
-        Task<PhoneUsage?> GetPhoneUsageByUserIdAsync(Guid userId);
-        Task<PhoneUsage?> GetPhoneUsageByIdAsync(Guid id);
-        Task<IEnumerable<PhoneUsage>> GetAllPhoneUsageAsync();
-        Task<PhoneUsage> CreatePhoneUsageAsync(PhoneUsage phoneUsage);
-        Task UpdatePhoneUsageAsync(PhoneUsage phoneUsage);
-        Task DeletePhoneUsageAsync(Guid id);
-    }
+        private readonly ApplicationDbContext _context;
 
-    public class PhoneUsageService : IPhoneUsageService
-    {
-        private readonly ApplicationDbContext _dbContext;
-
-        public PhoneUsageService(ApplicationDbContext dbContext)
+        public PhoneUsageService(ApplicationDbContext context)
         {
-            _dbContext = dbContext;
+            _context = context;
         }
 
-        public async Task<PhoneUsage?> GetPhoneUsageByUserIdAsync(Guid userId)
+        // CREATE
+        public async Task<PhoneUsage> CreateEntityAsync(PhoneUsage entity)
         {
-            return await _dbContext.PhoneUsages
-                .FirstOrDefaultAsync(p => p.UserId == userId);
+            entity.Id = Guid.NewGuid();
+
+            _context.PhoneUsages.Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
-        public async Task<PhoneUsage?> GetPhoneUsageByIdAsync(Guid id)
+        // READ - All
+        public async Task<List<PhoneUsage>> GetAllEntitiesAsync()
+            => await _context.PhoneUsages.ToListAsync();
+
+        // READ - By Id
+        public async Task<PhoneUsage?> GetEntityByIdAsync(Guid id)
+            => await _context.PhoneUsages.FindAsync(id);
+
+        // READ - By Condition (e.g., by UserId)
+        public async Task<List<PhoneUsage>> GetEntitiesByConditionAsync(
+            Expression<Func<PhoneUsage, bool>> predicate)
+            => await _context.PhoneUsages.Where(predicate).ToListAsync();
+
+        // READ - Single (e.g., FirstOrDefault)
+        public async Task<PhoneUsage?> GetSingleEntityAsync(
+            Expression<Func<PhoneUsage, bool>> predicate)
+            => await _context.PhoneUsages.FirstOrDefaultAsync(predicate);
+
+        // UPDATE
+        public async Task<bool> UpdateEntityAsync(PhoneUsage entity)
         {
-            return await _dbContext.PhoneUsages.FindAsync(id);
+            var existing = await _context.PhoneUsages.FindAsync(entity.Id);
+            if (existing == null) return false;
+
+            existing.UserId = entity.UserId;
+            existing.ScreenTimeMinutes = entity.ScreenTimeMinutes;
+
+            // Add any other fields you want to update
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<IEnumerable<PhoneUsage>> GetAllPhoneUsageAsync()
+        // DELETE
+        public async Task<bool> DeleteEntityAsync(Guid id)
         {
-            return await _dbContext.PhoneUsages.ToListAsync();
+            var existing = await _context.PhoneUsages.FindAsync(id);
+            if (existing == null) return false;
+
+            _context.PhoneUsages.Remove(existing);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<PhoneUsage> CreatePhoneUsageAsync(PhoneUsage phoneUsage)
-        {
-            _dbContext.PhoneUsages.Add(phoneUsage);
-            await _dbContext.SaveChangesAsync();
-            return phoneUsage;
-        }
-
-        public async Task UpdatePhoneUsageAsync(PhoneUsage phoneUsage)
-        {
-            _dbContext.PhoneUsages.Update(phoneUsage);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task DeletePhoneUsageAsync(Guid id)
-        {
-            var entity = await _dbContext.PhoneUsages.FindAsync(id);
-            if (entity != null)
-            {
-                _dbContext.PhoneUsages.Remove(entity);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
+        // BONUS: Convenience method (not in interface)
+        public Task<PhoneUsage?> GetPhoneUsageByUserIdAsync(Guid userId)
+            => GetSingleEntityAsync(p => p.UserId == userId);
     }
 }

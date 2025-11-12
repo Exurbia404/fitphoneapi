@@ -1,87 +1,58 @@
-// EducationController.cs
-using FitphoneBackend.Business.Services;
 using FitPhoneBackend.Business.Entities;
-
+using FitPhoneBackend.Business.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-[Route("api/[controller]")]
-[ApiController]
-public class EducationController : ControllerBase
+namespace FitphoneBackend.Controllers
 {
-    private readonly EducationService _educationService;
-
-    public EducationController(EducationService educationService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class EducationController : ControllerBase
     {
-        _educationService = educationService;
-    }
+        private readonly ICreatable<Education> _creator;
+        private readonly IReadable<Education> _reader;
+        private readonly IUpdatable<Education> _updater;
+        private readonly IDeletable<Education> _deleter;
 
-    // GET: api/Education
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Education>>> GetEducations()
-    {
-        var educations = await _educationService.GetAllAsync();
-        return Ok(educations);
-    }
-
-    // GET: api/Education/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Education>> GetEducation(int id)
-    {
-        var education = await _educationService.GetByIdAsync(id);
-        if (education == null)
+        public EducationController(
+            ICreatable<Education> creator,
+            IReadable<Education> reader,
+            IUpdatable<Education> updater,
+            IDeletable<Education> deleter)
         {
-            return NotFound();
-        }
-        return Ok(education);
-    }
-
-    // POST: api/Education
-    [HttpPost]
-    public async Task<ActionResult<Education>> CreateEducation([FromBody] Education education)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
+            _creator = creator;
+            _reader = reader;
+            _updater = updater;
+            _deleter = deleter;
         }
 
-        var createdEducation = await _educationService.CreateAsync(education);
-        return CreatedAtAction(nameof(GetEducation), new { id = createdEducation.Id }, createdEducation);
-    }
+        [HttpPost]
+        public async Task<IActionResult> Create(Education education) =>
+            Ok(await _creator.CreateEntityAsync(education));
 
-    // PUT: api/Education/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateEducation(int id, [FromBody] Education updatedEducation)
-    {
-        if (!ModelState.IsValid)
+        [HttpGet]
+        public async Task<IActionResult> GetAll() =>
+            Ok(await _reader.GetAllEntitiesAsync());
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
         {
-            return BadRequest(ModelState);
+            var education = await _reader.GetEntityByIdAsync(id);
+            return education == null ? NotFound() : Ok(education);
         }
 
-        try
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, Education education)
         {
-            await _educationService.UpdateAsync(id, updatedEducation);
-            return NoContent();
+            if (id != education.Id) return BadRequest("ID mismatch");
+            var updated = await _updater.UpdateEntityAsync(education);
+            return updated ? Ok(education) : NotFound();
         }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-    }
 
-    // DELETE: api/Education/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEducation(int id)
-    {
-        try
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            await _educationService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
+            var deleted = await _deleter.DeleteEntityAsync(id);
+            return deleted ? Ok() : NotFound();
         }
     }
 }

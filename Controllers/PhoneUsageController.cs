@@ -1,68 +1,58 @@
-﻿using AutoMapper;
-using FitphoneBackend.Business.DTOs.PhoneUsage;
-using FitPhoneBackend.Business.Entities;
-using FitPhoneBackend.Business.Services;
+﻿using FitPhoneBackend.Business.Entities;
+using FitPhoneBackend.Business.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
-[ApiController]
-public class PhoneUsageController : ControllerBase
+namespace FitphoneBackend.Controllers
 {
-    private readonly IPhoneUsageService _service;
-    private readonly IMapper _mapper;
-
-    public PhoneUsageController(IPhoneUsageService service, IMapper mapper)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PhoneUsageController : ControllerBase
     {
-        _service = service;
-        _mapper = mapper;
-    }
+        private readonly ICreatable<PhoneUsage> _creator;
+        private readonly IReadable<PhoneUsage> _reader;
+        private readonly IUpdatable<PhoneUsage> _updater;
+        private readonly IDeletable<PhoneUsage> _deleter;
 
-    [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> Get(Guid userId)
-    {
-        var usage = await _service.GetPhoneUsageByUserIdAsync(userId);
-        if (usage == null) return NotFound();
+        public PhoneUsageController(
+            ICreatable<PhoneUsage> creator,
+            IReadable<PhoneUsage> reader,
+            IUpdatable<PhoneUsage> updater,
+            IDeletable<PhoneUsage> deleter)
+        {
+            _creator = creator;
+            _reader = reader;
+            _updater = updater;
+            _deleter = deleter;
+        }
 
-        return Ok(_mapper.Map<PhoneUsageDto>(usage));
-    }
+        [HttpPost]
+        public async Task<IActionResult> Create(PhoneUsage phoneUsage) =>
+            Ok(await _creator.CreateEntityAsync(phoneUsage));
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var usages = await _service.GetAllPhoneUsageAsync();
-        return Ok(_mapper.Map<IEnumerable<PhoneUsageDto>>(usages));
-    }
+        [HttpGet]
+        public async Task<IActionResult> GetAll() =>
+            Ok(await _reader.GetAllEntitiesAsync());
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] PhoneUsageCreateDto dto)
-    {
-        var entity = _mapper.Map<PhoneUsage>(dto);
-        var created = await _service.CreatePhoneUsageAsync(entity);
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var phoneUsage = await _reader.GetEntityByIdAsync(id);
+            return phoneUsage == null ? NotFound() : Ok(phoneUsage);
+        }
 
-        return CreatedAtAction(nameof(Get), new { userId = created.UserId }, _mapper.Map<PhoneUsageDto>(created));
-    }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, PhoneUsage phoneUsage)
+        {
+            if (id != phoneUsage.Id) return BadRequest("ID mismatch");
+            var updated = await _updater.UpdateEntityAsync(phoneUsage);
+            return updated ? Ok(phoneUsage) : NotFound();
+        }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] PhoneUsageDto dto)
-    {
-        if (id != dto.Id) return BadRequest("ID mismatch");
-
-        var exists = await _service.GetPhoneUsageByIdAsync(id);
-        if (exists == null) return NotFound();
-
-        _mapper.Map(dto, exists);
-        await _service.UpdatePhoneUsageAsync(exists);
-
-        return NoContent();
-    }
-
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        var exists = await _service.GetPhoneUsageByIdAsync(id);
-        if (exists == null) return NotFound();
-
-        await _service.DeletePhoneUsageAsync(id);
-        return NoContent();
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var deleted = await _deleter.DeleteEntityAsync(id);
+            return deleted ? Ok() : NotFound();
+        }
     }
 }

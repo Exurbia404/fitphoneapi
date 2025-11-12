@@ -10,7 +10,7 @@ public class PhoneUsageConfiguration : IEntityTypeConfiguration<PhoneUsage>
 {
     public void Configure(EntityTypeBuilder<PhoneUsage> entity)
     {
-            entity.ToTable("phone_usage");                  // Map to table "phoneUsage"
+            entity.ToTable("phoneusage");                  // Map to table "phoneUsage"
             entity.HasKey(pu => pu.Id);                 // Primary key
 
             entity.Property(pu => pu.UserId)
