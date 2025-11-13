@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: FitphoneBackend  # All dotnet/docker commands run here
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,7 +37,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile
+          context: FitphoneBackend        # Build context = subfolder
+          file: FitphoneBackend/Dockerfile # Dockerfile location
           push: true
           tags: 454147fontys/fitphoneapi:latest
