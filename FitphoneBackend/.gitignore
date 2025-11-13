@@ -1,0 +1,78 @@
+# ---- Build results ----
+bin/
+obj/
+out/
+Debug/
+Release/
+publish/
+
+# ---- User-specific files ----
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+*.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ---- Logs and temp files ----
+*.log
+*.tlog
+*.tmp
+*.bak
+*.cache
+*.pidb
+*.svclog
+*.userprefs
+
+# ---- OS generated files ----
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# ---- Rider / JetBrains ----
+.idea/
+*.iml
+
+# ---- Visual Studio ----
+.vs/
+*.dbmdl
+*.jfm
+*.pdb
+
+# ---- NuGet ----
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# ---- ASP.NET / .NET ----
+appsettings.*.json
+secrets.json
+launchSettings.json
+
+# ---- Others ----
+*.swp
+*.bak
+*.orig
+*.rej
+*.tar.gz
+*.zip
+*.7z
+
+# ---- Build Artifacts ----
+/publish/
+/coverage/
+
+# ---- dotnet tools ----
+dotnet-tools.json
+
+# ---- Environment variables ----
+.env
+.env.*
