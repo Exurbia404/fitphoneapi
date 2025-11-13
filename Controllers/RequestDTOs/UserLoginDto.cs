@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-namespace FitphoneBackend.Controllers.DTOs{
+namespace FitPhoneBackend.Controllers.DTOs{
     public class UserLoginDto{
         [Required]
         public string Email { get; private set; }

@@ -1,5 +1,4 @@
-﻿// FitPhoneBackend.Business/Services/PhoneUsageService.cs
-using FitPhoneBackend.Business.Entities;
+﻿using FitPhoneBackend.Business.Entities;
 using FitPhoneBackend.Business.Interfaces;
 using FitPhoneBackend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +19,6 @@ namespace FitPhoneBackend.Business.Services
             _context = context;
         }
 
-        // CREATE
         public async Task<PhoneUsage> CreateEntityAsync(PhoneUsage entity)
         {
             entity.Id = Guid.NewGuid();
@@ -30,25 +28,20 @@ namespace FitPhoneBackend.Business.Services
             return entity;
         }
 
-        // READ - All
         public async Task<List<PhoneUsage>> GetAllEntitiesAsync()
             => await _context.PhoneUsages.ToListAsync();
 
-        // READ - By Id
         public async Task<PhoneUsage?> GetEntityByIdAsync(Guid id)
             => await _context.PhoneUsages.FindAsync(id);
 
-        // READ - By Condition (e.g., by UserId)
         public async Task<List<PhoneUsage>> GetEntitiesByConditionAsync(
             Expression<Func<PhoneUsage, bool>> predicate)
             => await _context.PhoneUsages.Where(predicate).ToListAsync();
 
-        // READ - Single (e.g., FirstOrDefault)
         public async Task<PhoneUsage?> GetSingleEntityAsync(
             Expression<Func<PhoneUsage, bool>> predicate)
             => await _context.PhoneUsages.FirstOrDefaultAsync(predicate);
 
-        // UPDATE
         public async Task<bool> UpdateEntityAsync(PhoneUsage entity)
         {
             var existing = await _context.PhoneUsages.FindAsync(entity.Id);
@@ -57,12 +50,10 @@ namespace FitPhoneBackend.Business.Services
             existing.UserId = entity.UserId;
             existing.ScreenTimeMinutes = entity.ScreenTimeMinutes;
 
-            // Add any other fields you want to update
             await _context.SaveChangesAsync();
             return true;
         }
 
-        // DELETE
         public async Task<bool> DeleteEntityAsync(Guid id)
         {
             var existing = await _context.PhoneUsages.FindAsync(id);
@@ -73,7 +64,6 @@ namespace FitPhoneBackend.Business.Services
             return true;
         }
 
-        // BONUS: Convenience method (not in interface)
         public Task<PhoneUsage?> GetPhoneUsageByUserIdAsync(Guid userId)
             => GetSingleEntityAsync(p => p.UserId == userId);
     }

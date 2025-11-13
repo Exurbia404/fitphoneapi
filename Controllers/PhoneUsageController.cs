@@ -1,8 +1,10 @@
 ﻿using FitPhoneBackend.Business.Entities;
 using FitPhoneBackend.Business.Interfaces;
+using FitPhoneBackend.Business.DTOs.PhoneUsageDto;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
-namespace FitphoneBackend.Controllers
+namespace FitPhoneBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -12,22 +14,37 @@ namespace FitphoneBackend.Controllers
         private readonly IReadable<PhoneUsage> _reader;
         private readonly IUpdatable<PhoneUsage> _updater;
         private readonly IDeletable<PhoneUsage> _deleter;
+        private readonly IMapper _mapper;
 
         public PhoneUsageController(
             ICreatable<PhoneUsage> creator,
             IReadable<PhoneUsage> reader,
             IUpdatable<PhoneUsage> updater,
-            IDeletable<PhoneUsage> deleter)
+            IDeletable<PhoneUsage> deleter,
+            IMapper mapper)
         {
             _creator = creator;
             _reader = reader;
             _updater = updater;
             _deleter = deleter;
+             _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PhoneUsage phoneUsage) =>
-            Ok(await _creator.CreateEntityAsync(phoneUsage));
+         public async Task<IActionResult> Create(PhoneUsageDto phoneUsageDto)
+        {
+            try
+            {
+                await _creator.CreateEntityAsync(_mapper.Map<PhoneUsage>(phoneUsageDto));
+                return Ok("PhoneUsage created successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use any logging framework)
+                Console.WriteLine($"[Create] Error creating phone usage: {ex}");
+                return BadRequest($"Error creating phone usage: {ex.InnerException?.Message ?? ex.Message}");
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll() =>

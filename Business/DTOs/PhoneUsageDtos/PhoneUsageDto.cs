@@ -1,4 +1,4 @@
-﻿namespace FitphoneBackend.Business.DTOs.PhoneUsage
+﻿namespace FitPhoneBackend.Business.DTOs.PhoneUsageDto
 {
     public class PhoneUsageDto
     {

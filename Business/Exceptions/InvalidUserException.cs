@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
-namespace FitphoneBackend.Business.Exceptions
+namespace FitPhoneBackend.Business.Exceptions
 {
     public class InvalidUserException : Exception
     {

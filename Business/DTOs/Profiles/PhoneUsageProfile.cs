@@ -1,7 +1,7 @@
 ﻿namespace FitphoneBackend.Business.DTOs.Profiles
 {
     using AutoMapper;
-    using FitphoneBackend.Business.DTOs.PhoneUsage;
+    using FitPhoneBackend.Business.DTOs.PhoneUsageDto;
     using FitPhoneBackend.Business.Entities;
    
     using static System.Runtime.InteropServices.JavaScript.JSType;

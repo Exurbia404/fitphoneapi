@@ -5,7 +5,7 @@ using FitPhoneBackend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace FitphoneBackend.Business.Services
+namespace FitPhoneBackend.Business.Services
 {
     public class EducationService :
         ICreatable<Education>,

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FitPhoneBackend.Business.Entities;
+using FitPhoneBackend.Business.Services;
+
 namespace FitPhoneBackend.Infrastructure
 {
     public class ApplicationDbContext : DbContext
@@ -9,6 +11,10 @@ namespace FitPhoneBackend.Infrastructure
             public DbSet<PhoneUsage> PhoneUsages { get; set; }
             public DbSet<Education> Educations{ get; set; }
             public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { } //in case I want to have extra options on this class
+            
+            public DbSet<Challenge> Challenges { get; set; }
+            public DbSet<Goal> Goals { get; set;  }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

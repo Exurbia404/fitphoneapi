@@ -2,7 +2,7 @@ using FitPhoneBackend.Business.Entities;
 using FitPhoneBackend.Business.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitphoneBackend.Controllers
+namespace FitPhoneBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
