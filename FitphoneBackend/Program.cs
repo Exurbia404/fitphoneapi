@@ -105,7 +105,9 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FitPhone AP
 app.UseHttpsRedirection();
 app.UseHttpLogging();
 
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();
