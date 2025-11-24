@@ -40,8 +40,25 @@ namespace FitPhoneBackend.Business.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        public PhoneUsage PhoneUsage { get; set; } //1-1 relationship, phone usage belongs to only one user
+        public PhoneUsage? PhoneUsage { get; set; } = null; //1-1 relationship, phone usage belongs to only one user
 
         // public ICollection<Garden> Gardens { get; set; } = new List<Garden>();
+
+        public User(Guid id, string username, string email, UsageReason usageReason, PhoneUsage phoneUsage)
+        {
+            Id = id;
+            Username = username;
+            Email = email;
+            UsageReason = usageReason;
+            PhoneUsage = phoneUsage;
+        }
+        public User(Guid id, string username, string email, UsageReason usageReason)
+        {
+            Id = id;
+            Username = username;
+            Email = email;
+            UsageReason = usageReason;
+            
+        }
     }
 }
