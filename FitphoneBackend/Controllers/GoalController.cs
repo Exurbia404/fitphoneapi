@@ -86,7 +86,7 @@ public class GoalController : ControllerBase
             if (!updated)
                 return NotFound($"Goal with ID {id} not found.");
 
-            return Ok("Goal updated successfully.");
+            return Ok(goal);
         }
         catch (Exception ex)
         {

@@ -86,7 +86,7 @@ public class ChallengeController : ControllerBase
             if (!updated)
                 return NotFound($"Challenge with ID {id} not found.");
 
-            return Ok("Challenge updated successfully.");
+            return Ok(challenge);
         }
         catch (Exception ex)
         {
