@@ -33,7 +33,7 @@ public class GoalController : ControllerBase
         try
         {
             await _creator.CreateEntityAsync(_mapper.Map<Goal>(goal));
-            return Ok("Goal created successfully.");
+            return Ok(goal);
         }
         catch (Exception ex)
         {

@@ -33,7 +33,7 @@ public class ChallengeController : ControllerBase
         try
         {
             await _creator.CreateEntityAsync(_mapper.Map<Challenge>(challengeDto));
-            return Ok("Challenge created successfully.");
+            return Ok(challengeDto);
         }
         catch (Exception ex)
         {
